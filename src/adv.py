@@ -1,6 +1,7 @@
 import sys
 from room import Room
 from player import Player
+from item import Item
 
 # Declare all the rooms
 
@@ -35,6 +36,14 @@ room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 
+# define items and link them to rooms
+
+room['foyer'].add_item(Item('key', 'a gleaming gold key'))
+room['outside'].add_item(Item('shield', 'a sturdy wooden shield'))
+room['outside'].add_item(Item('sword', 'a rusty iron sword'))
+room['overlook'].add_item(Item('helmet', 'a helmet'))
+room['treasure'].add_item(Item('chest', 'hearin lies untold treasure'))
+
 #
 # Main
 #
@@ -56,8 +65,10 @@ gimli = Player('Gimli', room['outside'])
 
 
 while True:
-    print(gimli.location.name)
+    print(f"Room: {gimli.location.name}")
     print(gimli.location.text)
+    print("Items in this room: ", end="")
+    print([item.name for item in gimli.location.items])
     print("Enter your next move below (or enter q to quit)")
     command = input(">>> ")
 
