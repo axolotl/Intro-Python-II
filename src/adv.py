@@ -54,5 +54,12 @@ gimli.location = room['outside']
 #
 # If the user enters "q", quit the game.
 
-print(gimli.location.name)
-print(gimli.location.text)
+continue_game = True
+
+while continue_game:
+    print(gimli.location.name)
+    print(gimli.location.text)
+    print("Enter your next move below (or enter q to quit)")
+    command = input(">>> ")
+    if command == 'q':
+        continue_game = False
