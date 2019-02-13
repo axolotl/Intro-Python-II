@@ -1,3 +1,4 @@
+import sys
 from room import Room
 from player import Player
 
@@ -40,8 +41,7 @@ room['treasure'].s_to = room['narrow']
 
 # Make a new player object that is currently in the 'outside' room.
 
-gimli = Player('Gimli')
-gimli.location = room['outside']
+gimli = Player('Gimli', room['outside'])
 
 # Write a loop that:
 #
@@ -54,12 +54,18 @@ gimli.location = room['outside']
 #
 # If the user enters "q", quit the game.
 
-continue_game = True
 
-while continue_game:
+while True:
     print(gimli.location.name)
     print(gimli.location.text)
     print("Enter your next move below (or enter q to quit)")
     command = input(">>> ")
+
     if command == 'q':
-        continue_game = False
+        sys.exit()
+
+    elif command in ['n', 'e', 's', 'w']:
+        try:
+            gimli.location = getattr(gimli.location, f'{command}_to')
+        except AttributeError:
+            print('You cannot go that direction')
