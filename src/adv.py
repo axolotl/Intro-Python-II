@@ -80,3 +80,21 @@ while True:
             gimli.location = getattr(gimli.location, f'{command}_to')
         except AttributeError:
             print('You cannot go that direction')
+
+    else:
+        commands = command.split(' ')
+
+        if len(commands) != 2:
+            print('Invalid command!')
+        else:
+            verb, obj = commands
+            if verb == 'take':
+                item = [x for x in gimli.location.items if x.name == obj][0]
+                gimli.location.remove_item(item)
+                gimli.add_item(item)
+            elif verb == 'drop':
+                item = [x for x in gimli.items if x.name == obj][0]
+                gimli.location.add_item(item)
+                gimli.remove_item(item)
+            else:
+                print("Invalid command!")
