@@ -81,6 +81,10 @@ while True:
         except AttributeError:
             print('You cannot go that direction')
 
+    elif command == 'i':
+        print("Inventory: ", end="")
+        print([item.name for item in gimli.items])
+
     else:
         commands = command.split(' ')
 
