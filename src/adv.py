@@ -92,9 +92,11 @@ while True:
                 item = [x for x in gimli.location.items if x.name == obj][0]
                 gimli.location.remove_item(item)
                 gimli.add_item(item)
+                item.on_take()
             elif verb == 'drop':
                 item = [x for x in gimli.items if x.name == obj][0]
                 gimli.location.add_item(item)
                 gimli.remove_item(item)
+                item.on_drop()
             else:
                 print("Invalid command!")
