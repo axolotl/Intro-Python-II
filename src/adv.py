@@ -89,14 +89,20 @@ while True:
         else:
             verb, obj = commands
             if verb == 'take':
-                item = [x for x in gimli.location.items if x.name == obj][0]
-                gimli.location.remove_item(item)
-                gimli.add_item(item)
-                item.on_take()
+                try:
+                    item = [x for x in gimli.location.items if x.name == obj][0]
+                    gimli.location.remove_item(item)
+                    gimli.add_item(item)
+                    item.on_take()
+                except IndexError:
+                    print('item does not exist there')
             elif verb == 'drop':
-                item = [x for x in gimli.items if x.name == obj][0]
-                gimli.location.add_item(item)
-                gimli.remove_item(item)
-                item.on_drop()
+                try:
+                    item = [x for x in gimli.items if x.name == obj][0]
+                    gimli.location.add_item(item)
+                    gimli.remove_item(item)
+                    item.on_drop()
+                except IndexError:
+                    print('player does not hold item')
             else:
                 print("Invalid command!")
