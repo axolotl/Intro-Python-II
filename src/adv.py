@@ -1,4 +1,7 @@
+import sys
 from room import Room
+from player import Player
+from item import Item
 
 # Declare all the rooms
 
@@ -33,11 +36,21 @@ room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 
+# define items and link them to rooms
+
+room['foyer'].add_item(Item('key', 'a gleaming gold key'))
+room['outside'].add_item(Item('shield', 'a sturdy wooden shield'))
+room['outside'].add_item(Item('sword', 'a rusty iron sword'))
+room['overlook'].add_item(Item('helmet', 'a helmet'))
+room['treasure'].add_item(Item('chest', 'hearin lies untold treasure'))
+
 #
 # Main
 #
 
 # Make a new player object that is currently in the 'outside' room.
+
+gimli = Player('Gimli', room['outside'])
 
 # Write a loop that:
 #
@@ -49,3 +62,51 @@ room['treasure'].s_to = room['narrow']
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+
+
+while True:
+    print(f"Room: {gimli.location.name}")
+    print(gimli.location.text)
+    print("Items in this room: ", end="")
+    print([item.name for item in gimli.location.items])
+    print("Enter your next move below (or enter q to quit)")
+    command = input(">>> ")
+
+    if command == 'q':
+        sys.exit()
+
+    elif command in ['n', 'e', 's', 'w']:
+        try:
+            gimli.location = getattr(gimli.location, f'{command}_to')
+        except AttributeError:
+            print('You cannot go that direction')
+
+    elif command == 'i':
+        print("Inventory: ", end="")
+        print([item.name for item in gimli.items])
+
+    else:
+        commands = command.split(' ')
+
+        if len(commands) != 2:
+            print('Invalid command!')
+        else:
+            verb, obj = commands
+            if verb == 'take':
+                try:
+                    item = [x for x in gimli.location.items if x.name == obj][0]
+                    gimli.location.remove_item(item)
+                    gimli.add_item(item)
+                    item.on_take()
+                except IndexError:
+                    print('item does not exist there')
+            elif verb == 'drop':
+                try:
+                    item = [x for x in gimli.items if x.name == obj][0]
+                    gimli.location.add_item(item)
+                    gimli.remove_item(item)
+                    item.on_drop()
+                except IndexError:
+                    print('player does not hold item')
+            else:
+                print("Invalid command!")
